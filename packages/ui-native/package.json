@@ -1,0 +1,16 @@
+{
+  "name": "@revealbi/ui-native",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./index.js",
+  "module": "./index.mjs",
+  "typings": "./index.d.ts",
+  "dependencies": {
+    "lit": "^3.1.4"
+  },
+  "peerDependencies": {
+    "@revealbi/dom": "*",
+    "igniteui-webcomponents-charts": "^4.8.1",
+    "igniteui-webcomponents-core": "^4.8.1"
+  }
+}

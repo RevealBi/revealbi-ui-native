@@ -1,0 +1,119 @@
+:root,
+:host,
+.rv-theme-light {
+    color-scheme: light;
+
+    /* Fonts */
+    --rv-font-family: "Roboto", sans-serif;
+
+     /* Font sizes */
+    --rv-font-size-2x-small: 0.625rem; /* 10px */
+    --rv-font-size-x-small: 0.75rem; /* 12px */
+    --rv-font-size-small: 0.875rem; /* 14px */
+    --rv-font-size-medium: 1rem; /* 16px */
+    --rv-font-size-large: 1.25rem; /* 20px */
+    --rv-font-size-x-large: 1.5rem; /* 24px */
+    --rv-font-size-2x-large: 2.25rem; /* 36px */
+    --rv-font-size-3x-large: 3rem; /* 48px */
+    --rv-font-size-4x-large: 4.5rem; /* 72px */
+
+    /* Butttons */
+    --rv-button-background-color:  rgb(110, 137, 247);
+    --rv-button-background-color-hover: rgb(84, 107, 203);
+
+    /* Borders */
+    --rv-border-color: #dee2e6;
+    --rv-border-radius-small: 0.1875rem; /* 3px */
+    --rv-border-radius-medium: 0.25rem; /* 4px */
+    --rv-border-radius-large: 0.5rem; /* 8px */
+    --rv-border-radius-x-large: 1rem; /* 16px */
+    --rv-border-radius-circle: 50%; /* circular shape */
+
+    /* Spacings  */
+    --rv-spacing-3x-small: 0.125rem; /* 2px */
+    --rv-spacing-2x-small: 0.25rem; /* 4px */
+    --rv-spacing-x-small: 0.5rem; /* 8px */
+    --rv-spacing-small: 0.75rem; /* 12px */
+    --rv-spacing-medium: 1rem; /* 16px */
+    --rv-spacing-large: 1.25rem; /* 20px */
+    --rv-spacing-x-large: 1.75rem; /* 28px */
+    --rv-spacing-2x-large: 2.25rem; /* 36px */
+    --rv-spacing-3x-large: 3rem; /* 48px */
+    --rv-spacing-4x-large: 4.5rem; /* 72px */
+
+    /* Shadows */
+    --rv-shadow-x-large: 0 4px 16px hsl(240 3.8% 46.1% / 12%);
+
+    /* Dialogs */
+    --rv-dialog-background-color: hsl(225, 29%, 97%);
+    --rv-dialog-background-color-header: white;
+    --rv-dialog-background-color-footer: white;
+    --rv-dialog-background-color-overlay:  hsl(0, 0%, 0%, .7);
+
+    /* Z-indexes */
+    --rv-zindex-dialog: 800;
+}
+
+.rv-button  {
+    font-family: var(--rv-font-family);
+    background-color: var(--rv-button-background-color);
+    border: none;
+    color: white;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .rv-button:hover {
+    background-color: var(--rv-button-background-color-hover);
+  }
+
+  .rv-button-error  {
+    font-family: var(--rv-font-family);    
+    font-weight: bold;
+    background-color: rgb(239, 84, 81);
+    border: none;
+    color: white;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .rv-button-error:hover {
+    background-color: rgba(188, 55, 53, 0.915);
+  }
+
+  .rv-button-cancel  {    
+    font-family: var(--rv-font-family);
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .rv-button-cancel:hover {
+    background-color: rgb(215, 215, 215);
+  }
