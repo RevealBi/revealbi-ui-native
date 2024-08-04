@@ -15,7 +15,6 @@ export class RVChartTile extends LitElement {
     protected override async updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         if (changedProperties.has("visualization") && this.visualization) {
             const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization);
-            console.log(data.value.Table);
             this.renderChart(data);
         }
     }

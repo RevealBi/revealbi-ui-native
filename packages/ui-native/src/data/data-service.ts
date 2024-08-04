@@ -38,6 +38,89 @@ export class DataService {
     }
 }
 
+interface DataPoint {
+    category: string;
+    summary: string;
+    value: number;
+}
+
+//maybe this shoud be a factor that can decide what to do based on the type of chart passed in
+export class DataTransformationService {
+    static transformPieChartData(data: any): DataPoint[] {
+        const dataPoints: DataPoint[] = [];
+        const labels = data.DataColumns[0].Labels;
+        const values = data.DataColumns[1].Values;
+
+        for (let i = 0; i < labels.length - 1; i++) { // Ignoring "Grand Total"
+            dataPoints.push({
+                category: labels[i],
+                summary: data.DataColumns[1].Cells[i].FormattedValue,
+                value: values[i]
+            });
+        }
+
+        return dataPoints;
+    }
+
+    //todo: revisit and make sire this works like it's supposed to
+    //this should probably return an obkect the defines the structure of the data including which xAxis and yAxis to create, along with what series, and the data
+    static transformData_TEST(data: any): any {
+        let ret: any[] = [];
+        if (data.DataColumns) {
+            for (var i = 0; i < data.DataColumns.length; i++) {
+                let currColumn = data.DataColumns[i];
+                let columnType = currColumn.Type;
+                switch (columnType) {
+                    case "Date":
+                        this.processDateColumn(ret, currColumn);
+                        break;
+                    case "Number":
+                        this.processNumberColumn(ret, currColumn);
+                        break;
+                    case "String":
+                        this.processStringColumn(ret, currColumn);
+                        break;
+                }
+            }
+        }
+
+        return ret;
+    }
+    static processDateColumn(arr: any[], currColumn: any) {
+        let labels = currColumn.Labels;
+        for (var i = 0; i < labels?.length - 1; i++) {
+            let currLabel = labels[i];
+            if (currLabel instanceof Object && currLabel._type == "date") {
+                let dateVal = new Date(currLabel.value);
+                if (!arr[i]) {
+                    arr[i] = {};
+                }
+                arr[i][currColumn.Name] = dateVal;
+            }
+        }
+    }
+    static processNumberColumn(arr: any[], currColumn: any) {
+        let values = currColumn.Values;
+        for (var i = 0; i < values?.length - 1; i++) {
+            let currValue = values[i];
+            if (!arr[i]) {
+                arr[i] = {};
+            }
+            arr[i][currColumn.Name] = currValue;
+        }
+    }
+    static processStringColumn(arr: any[], currColumn: any) {
+        let values = currColumn.Values;
+        for (var i = 0; i < values?.length - 1; i++) {
+            let currValue = values[i];
+            if (!arr[i]) {
+                arr[i] = {};
+            }
+            arr[i][currColumn.Name] = currValue;
+        }
+    }
+}
+
 export class DashboardService {
     static async getById(id: string) {
         const response = await fetch(`${RevealSdkSettings.serverUrl}DashboardFile/${id}`);

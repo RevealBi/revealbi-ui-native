@@ -1,18 +1,13 @@
 import { IgcPieChartComponent, IgcPieChartModule } from "igniteui-webcomponents-charts";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { ModuleManager } from "igniteui-webcomponents-core";
+import { DataTransformationService } from "packages/ui-native/src/data/data-service";
 
 ModuleManager.register(IgcPieChartModule);
 
-interface DataPoint {
-    category: string;
-    summary: string;
-    value: number;
-}
-
 export class PieChartRenderer extends ChartRendererBase {
 
-    override createChart(visualization: any, data: any): any {
+    override createChart(visualization: any, data: any): HTMLElement {
         const chart = document.createElement("igc-pie-chart") as IgcPieChartComponent;
         chart.id = visualization.chartType + "-" + visualization.title;
         chart.legendLabelMemberPath = "category";
@@ -25,20 +20,7 @@ export class PieChartRenderer extends ChartRendererBase {
         return chart;
     }
 
-    //todo: create a service that handles the data transformation - this is probably wrong anyways
-    transformData(table: any): any {
-        const dataPoints: DataPoint[] = [];
-        const labels = table.DataColumns[0].Labels;
-        const values = table.DataColumns[1].Values;
-    
-        for (let i = 0; i < labels.length - 1; i++) { // Ignoring "Grand Total"
-            dataPoints.push({
-                category: labels[i],
-                summary: table.DataColumns[1].Cells[i].FormattedValue,
-                value: values[i]
-            });
-        }
-    
-        return dataPoints;
+    transformData(data: any): any {    
+        return DataTransformationService.transformPieChartData(data);
     }
 }
