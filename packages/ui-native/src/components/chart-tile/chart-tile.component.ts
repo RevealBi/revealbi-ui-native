@@ -1,9 +1,9 @@
 import { html, LitElement, PropertyValueMap } from "lit";
 import { customElement, property } from 'lit/decorators.js';
-import { ChartType, type IVisualization, JsonConvert, RdashDocument } from "@revealbi/dom";
+import { ChartType, type IVisualization, RdashDocument } from "@revealbi/dom";
 import { ChartRegistry, IChartRenderer } from "./chart-render-registry";
-import { RevealSdkSettings } from "../../RevealSdkSettings";
 import styles from "./chart-tile.styles";
+import { DataService } from "../../data/data-service";
 
 @customElement("rv-chart-tile")
 export class RVChartTile extends LitElement {
@@ -11,46 +11,10 @@ export class RVChartTile extends LitElement {
 
     @property({ type: Object }) dashboard: RdashDocument | undefined;
     @property({ type: Object }) visualization!: IVisualization;
-    private _dataEndpoint: string = `${RevealSdkSettings.serverUrl}dashboard/editor/widget/data`;
-
-    private async fetchData() {
-
-        const viz = JsonConvert.serialize(this.visualization);
-        let dataSources: string[] = [];
-        this.dashboard?.dataSources.forEach((dataSource) => {
-            const ds = JsonConvert.serialize(dataSource);
-            dataSources.push(JSON.parse(ds));
-        });
-
-        try {
-            const response = await fetch(this._dataEndpoint, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    dashboardId: this.dashboard?.title,
-                    dataSources: dataSources,
-                    globalFilters: undefined, //todo: implement global filters
-                    globalDateFilter: undefined, //todo: implement global date filter
-                    maxCells: 100000,
-                    refresh: false,
-                    selectedWidget: JSON.parse(viz),
-                }),
-            });
-            if (!response.ok) {
-                throw new Error(`Failed to fetch data from ${this._dataEndpoint}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    }
 
     protected override async updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         if (changedProperties.has("visualization") && this.visualization) {
-            const data = await this.fetchData();
+            const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization);
             console.log(data.value.Table);
             this.renderChart(data);
         }

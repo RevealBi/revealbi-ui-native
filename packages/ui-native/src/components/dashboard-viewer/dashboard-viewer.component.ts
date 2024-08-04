@@ -2,7 +2,7 @@ import { html, LitElement, PropertyValueMap } from "lit";
 import { customElement, property } from 'lit/decorators.js';
 import styles from "./dashboard-viewer.styles";
 import { RdashDocument } from "@revealbi/dom";
-import { RevealSdkSettings } from "../../RevealSdkSettings";
+import { DashboardService } from "../../data/data-service";
 
 @customElement("rv-dashboard-viewer")
 export class RvDashboardViewer extends LitElement {
@@ -10,19 +10,10 @@ export class RvDashboardViewer extends LitElement {
 
     @property({ type: String }) dashboard: string | RdashDocument | undefined;
 
-    private async fetchDashboard(dashboard: string): Promise<RdashDocument> {
-        const response = await fetch(`${RevealSdkSettings.serverUrl}DashboardFile/${dashboard}`);
-        if (response.ok) {
-            const result = await response.json();
-            return RdashDocument.loadFromJson(result["model"]);
-        }
-        throw new Error(`Failed to fetch dashboard ${dashboard}`);
-    }
-
     private async updateDashboard(dashboard: string | RdashDocument | undefined): Promise<void> {
         if (dashboard) {
             if (typeof dashboard === "string") {
-                this.dashboard = await this.fetchDashboard(dashboard);
+                this.dashboard = await DashboardService.getById(dashboard);
             }
         }
     }
