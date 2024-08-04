@@ -2,6 +2,7 @@ import { ChartType } from "@revealbi/dom";
 import { PieChartRenderer } from "./chart-renderers/pie-chart-renderer";
 import { DoughnutChartRenderer } from "./chart-renderers/doughnut-chart-renderer";
 import { DataChartRenderer } from "./chart-renderers/data-chart-renderer";
+import { FunnelChartRenderer } from "./chart-renderers/funnel-chart-renderer";
 
 export interface IChartRenderer {
     render(visualization: any, container: Element, data: any): void;
@@ -13,6 +14,7 @@ export class ChartRegistry {
     static {
         ChartRegistry.registry.set(ChartType.Column, DataChartRenderer);
         ChartRegistry.registry.set(ChartType.Doughnut, DoughnutChartRenderer);
+        ChartRegistry.registry.set(ChartType.Funnel, FunnelChartRenderer);
         ChartRegistry.registry.set(ChartType.Line, DataChartRenderer);
         ChartRegistry.registry.set(ChartType.Pie, PieChartRenderer);
         ChartRegistry.registry.set(ChartType.SplineArea, DataChartRenderer);
