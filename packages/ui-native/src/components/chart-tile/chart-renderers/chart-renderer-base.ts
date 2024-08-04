@@ -1,6 +1,8 @@
 import { IgcItemLegendComponent, IgcItemLegendModule, LegendOrientation } from "igniteui-webcomponents-charts";
 import { IChartRenderer } from "../chart-render-registry";
 import { ModuleManager } from "igniteui-webcomponents-core";
+import { RVChartTile } from "../chart-tile.component";
+import { IVisualization } from "@revealbi/dom";
 
 ModuleManager.register(IgcItemLegendModule);
 
@@ -9,13 +11,13 @@ export abstract class ChartRendererBase implements IChartRenderer {
 
     abstract transformData(data: any): any;
 
-    render(visualization: any, container: HTMLElement, data: any) {
-        const host = container.querySelector(`#chart-host-${visualization.id}`) as HTMLElement;    
+    render(visualization: IVisualization, container: RVChartTile, data: any) {
+        if (!container.chartHost) return;
 
         const table = data.Table;
         if (table.RowCount > 0) {
             this.legend = this.createLegend();
-            if (this.legend) host.appendChild(this.legend);
+            if (this.legend) container.chartHost.appendChild(this.legend);
             const chart = this.createChart(visualization, this.transformData(table));
             if ('legend' in chart) {                
                 chart.legend = this.legend;
@@ -23,9 +25,9 @@ export abstract class ChartRendererBase implements IChartRenderer {
             }
             this.setAdditionalChartProperties(chart, visualization);
             
-            host.appendChild(chart);
+            container.chartHost.appendChild(chart);
         } else {
-            host.innerHTML = "<div>No data available</div>";
+            container.chartHost.innerHTML = "<div>No data available</div>";
         }
     }
 

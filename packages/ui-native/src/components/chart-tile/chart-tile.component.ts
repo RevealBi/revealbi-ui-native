@@ -16,13 +16,18 @@ export class RVChartTile extends LitElement {
     @property({ type: Object }) dashboard!: RdashDocument;
     @property({ type: Object }) visualization!: IVisualization;
 
-    private toolbar?: IgcToolbarComponent;
-    private container? : HTMLElement;
-
-    protected override firstUpdated(_changedProperties: PropertyValues): void {
-        this.toolbar = this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent;
-        this.container = this.shadowRoot?.getElementById(`chart-tile-container-${this.visualization.id}`) as HTMLElement;
+    get container(): HTMLElement {
+        return this.shadowRoot?.getElementById(`chart-tile-container-${this.visualization.id}`) as HTMLElement;
     }
+    get header(): HTMLElement {
+        return this.shadowRoot?.querySelector(".header") as HTMLElement;
+    }
+    get toolbar(): IgcToolbarComponent | null {
+        return this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent
+    }
+    get chartHost(): HTMLElement {
+        return this.shadowRoot?.getElementById(`chart-host-${this.visualization.id}`) as HTMLElement;
+    }    
 
     protected override async updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         if (changedProperties.has("visualization") && this.visualization) {
@@ -40,7 +45,7 @@ export class RVChartTile extends LitElement {
         // Get the renderer for the chart type
         const chartRenderer: IChartRenderer | undefined = ChartRegistry.getChartRenderer(chartType);
         if (chartRenderer) {
-            chartRenderer.render(this.visualization, this.container, data ? data.value : null);
+            chartRenderer.render(this.visualization, this, data ? data.value : null);
             
             const chart = this.shadowRoot?.querySelector("igc-data-chart");
             if (chart) {
@@ -48,8 +53,7 @@ export class RVChartTile extends LitElement {
             }
 
         } else {
-            const host = this.shadowRoot?.getElementById(`chart-host-${this.visualization.id}`);
-            if (host) host.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
+            if (this.chartHost) this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
         }
     }
 
@@ -59,8 +63,8 @@ export class RVChartTile extends LitElement {
             <div class="header">
                 <div class="header-title">${this.visualization.title}</div>
                 <div class="toolbar">
-                <igc-toolbar id="toolbar-${this.visualization.id}" ></igc-toolbar>
-    </div>
+                    <igc-toolbar id="toolbar-${this.visualization.id}" ></igc-toolbar>
+                </div>
             </div>
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>
         </div>

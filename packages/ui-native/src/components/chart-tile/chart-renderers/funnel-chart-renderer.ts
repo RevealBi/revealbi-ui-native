@@ -1,13 +1,14 @@
-import { IgcFunnelChartComponent, IgcFunnelChartModule, IgcPieChartComponent, OuterLabelAlignment } from "igniteui-webcomponents-charts";
+import { IgcFunnelChartComponent, IgcFunnelChartModule } from "igniteui-webcomponents-charts";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { ModuleManager } from "igniteui-webcomponents-core";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
+import { IVisualization } from "@revealbi/dom";
 
 ModuleManager.register(IgcFunnelChartModule);
 
 export class FunnelChartRenderer extends ChartRendererBase {
 
-    override createChart(visualization: any, data: any): HTMLElement {
+    override createChart(visualization: IVisualization, data: any): HTMLElement {
         const chart = document.createElement("igc-funnel-chart") as IgcFunnelChartComponent;
         chart.id = visualization.chartType + "-" + visualization.title;
         chart.outerLabelMemberPath = "category";

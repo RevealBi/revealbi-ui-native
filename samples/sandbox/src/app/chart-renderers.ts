@@ -1,17 +1,15 @@
-import { ChartType } from "@revealbi/dom";
-import { ChartRegistry, IChartRenderer } from "@revealbi/ui-native";
+import { ChartType, IVisualization } from "@revealbi/dom";
+import { ChartRegistry, IChartRenderer, RVChartTile } from "@revealbi/ui-native";
 declare let Highcharts: any;
 
 class KpiChartRenderer implements IChartRenderer {
 
-    render(visualization: any, container: Element, data: any) {
-        const chartHost = container.querySelector(`#chart-host-${visualization.id}`);
-
+    render(visualization: IVisualization, container: RVChartTile, data: any) {
         const trackColors = Highcharts.getOptions().colors.map((color: any) =>
             new Highcharts.Color(color).setOpacity(0.3).get()
         );
 
-        Highcharts.chart(chartHost, {
+        Highcharts.chart(container.chartHost, {
 
             chart: {
                 type: 'solidgauge',
@@ -39,12 +37,6 @@ class KpiChartRenderer implements IChartRenderer {
                 pointFormat: '{series.name}<br>' +
                     '<span style="font-size: 2em; color: {point.color}; ' +
                     'font-weight: bold">{point.y}</span>',
-                // positioner: function (labelWidth: any) {
-                //     return {
-                //         x: (this.chart.chartWidth - labelWidth) / 2,
-                //         y: (this.chart.plotHeight / 2) + 15
-                //     };
-                // }
             },
 
             pane: {

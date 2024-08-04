@@ -1,8 +1,8 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryAxisBaseComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericAxisBaseComponent, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
-import { DataSeriesType, ModuleManager } from "igniteui-webcomponents-core";
+import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryAxisBaseComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericAxisBaseComponent, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { ModuleManager } from "igniteui-webcomponents-core";
 
 ModuleManager.register(
     IgcDataChartCoreModule,
@@ -27,7 +27,7 @@ export class DataChartRenderer extends ChartRendererBase {
         return null;
     }
 
-    protected override createChart(visualization: any, data: any): HTMLElement {
+    protected override createChart(visualization: IVisualization, data: any): HTMLElement {
         const processedData = DataTransformationService.transformData_TEST(data);
 
         const chart = document.createElement("igc-data-chart") as IgcDataChartComponent;
@@ -71,6 +71,9 @@ export class DataChartRenderer extends ChartRendererBase {
             }
         }
 
+        const tooltip = this.createTooltip();
+        chart.series.add(tooltip);
+
         return chart;
     }
 
@@ -103,6 +106,10 @@ export class DataChartRenderer extends ChartRendererBase {
         series.valueMemberPath = fieldName;        
         return series;
         
+    }
+
+    public createTooltip(): IgcDataToolTipLayerComponent {
+        return document.createElement("igc-data-tool-tip-layer") as IgcDataToolTipLayerComponent;
     }
 
     createSeriesName(type: ChartType) {
