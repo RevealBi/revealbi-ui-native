@@ -5,12 +5,13 @@ declare let Highcharts: any;
 class KpiChartRenderer implements IChartRenderer {
 
     render(visualization: any, container: Element, data: any) {
+        const chartHost = container.querySelector(`#chart-host-${visualization.id}`);
 
         const trackColors = Highcharts.getOptions().colors.map((color: any) =>
             new Highcharts.Color(color).setOpacity(0.3).get()
         );
 
-        Highcharts.chart(container, {
+        Highcharts.chart(chartHost, {
 
             chart: {
                 type: 'solidgauge',

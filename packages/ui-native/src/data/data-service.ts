@@ -44,7 +44,7 @@ interface DataPoint {
     value: number;
 }
 
-//maybe this shoud be a factor that can decide what to do based on the type of chart passed in
+//maybe this shoud be a factory that can decide what to do based on the type of chart passed in
 export class DataTransformationService {
     static transformPieChartData(data: any): DataPoint[] {
         const dataPoints: DataPoint[] = [];
@@ -63,7 +63,7 @@ export class DataTransformationService {
     }
 
     //todo: revisit and make sire this works like it's supposed to
-    //this should probably return an obkect the defines the structure of the data including which xAxis and yAxis to create, along with what series, and the data
+    //this should probably return an object the defines the structure of the data including which xAxis and yAxis to create, along with what series, and the data
     static transformData_TEST(data: any): any {
         let ret: any[] = [];
         if (data.DataColumns) {

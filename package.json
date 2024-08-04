@@ -8,6 +8,8 @@
     "@revealbi/dom": "^0.0.12",
     "igniteui-webcomponents-charts": "^4.8.1",
     "igniteui-webcomponents-core": "^4.8.1",
+    "igniteui-webcomponents-inputs": "^4.8.1",
+    "igniteui-webcomponents-layouts": "^4.8.1",
     "lit": "^3.1.4",
     "tslib": "^2.3.0"
   },

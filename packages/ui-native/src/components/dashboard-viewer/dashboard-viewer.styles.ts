@@ -24,17 +24,4 @@ export default css`
     .layout {
       height: calc(100% - 60px);
     }
-
-    .widget {
-      height: 100%;
-    }
-
-    .tile-header {
-      font-size: 1.2em;
-      font-weight: bold;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
-      margin-bottom: 10px;
-      height: 30px;
-    }
 `;

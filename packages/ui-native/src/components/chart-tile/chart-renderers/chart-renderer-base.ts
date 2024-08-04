@@ -10,10 +10,12 @@ export abstract class ChartRendererBase implements IChartRenderer {
     abstract transformData(data: any): any;
 
     render(visualization: any, container: HTMLElement, data: any) {
+        const host = container.querySelector(`#chart-host-${visualization.id}`) as HTMLElement;    
+
         const table = data.Table;
         if (table.RowCount > 0) {
             this.legend = this.createLegend();
-            if (this.legend) container.appendChild(this.legend);
+            if (this.legend) host.appendChild(this.legend);
             const chart = this.createChart(visualization, this.transformData(table));
             if ('legend' in chart) {                
                 chart.legend = this.legend;
@@ -21,9 +23,9 @@ export abstract class ChartRendererBase implements IChartRenderer {
             }
             this.setAdditionalChartProperties(chart, visualization);
             
-            container.appendChild(chart);
+            host.appendChild(chart);
         } else {
-            container.innerHTML = "<div>No data available</div>";
+            host.innerHTML = "<div>No data available</div>";
         }
     }
 

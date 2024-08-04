@@ -22,7 +22,6 @@ export class RvTile extends LitElement {
     }
     
     .tile-content {
-      padding: 10px;
       height: 100%;
       box-sizing: border-box;
     }
