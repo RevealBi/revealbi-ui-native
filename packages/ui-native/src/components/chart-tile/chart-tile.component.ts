@@ -3,10 +3,10 @@ import { customElement, property } from 'lit/decorators.js';
 import { ChartType, type IVisualization, JsonConvert, RdashDocument } from "@revealbi/dom";
 import { ChartRegistry, IChartRenderer } from "./chart-render-registry";
 import { RevealSdkSettings } from "../../RevealSdkSettings";
-import styles from "./chart.styles";
+import styles from "./chart-tile.styles";
 
-@customElement("rv-chart")
-export class RvChart extends LitElement {
+@customElement("rv-chart-tile")
+export class RVChartTile extends LitElement {
     static override styles = styles;
 
     @property({ type: Object }) dashboard: RdashDocument | undefined;
@@ -57,13 +57,13 @@ export class RvChart extends LitElement {
     }
 
     private renderChart(data: any) {
-        const container = this.shadowRoot?.querySelector(".chart-container");
+        const container = this.shadowRoot?.querySelector(".chart-host");
         if (!container) return;
 
         // Clear any existing content
         container.innerHTML = "";
 
-        //if it's a custom chart type, let's use the title as the chart type
+        //if it's a custom chart type, let's use the title as the key
         const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
 
         // Get the renderer for the chart type
@@ -77,7 +77,10 @@ export class RvChart extends LitElement {
 
     override render() {
         return html`
-        <div class="chart-container"></div>
+        <div class="chart-tile-container">
+            <div class="header-title">${this.visualization.title}</div>
+            <div class="chart-host"></div>
+        </div>
         `;
     }
 }

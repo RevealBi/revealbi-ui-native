@@ -1,7 +1,7 @@
 import { html, LitElement, PropertyValueMap } from "lit";
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import styles from "./dashboard-viewer.styles";
-import { IVisualization, RdashDocument } from "@revealbi/dom";
+import { RdashDocument } from "@revealbi/dom";
 import { RevealSdkSettings } from "../../RevealSdkSettings";
 
 @customElement("rv-dashboard-viewer")
@@ -35,16 +35,6 @@ export class RvDashboardViewer extends LitElement {
         }
     }
 
-    renderVisualization(dashboard: RdashDocument, visualization: IVisualization) {
-        return html`
-            <div class="widget">
-                <div class="tile-header">${visualization.title}</div>
-                <div style="height: calc(100% - 40px)">
-                    <rv-chart .dashboard=${dashboard} .visualization=${visualization}></rv-chart>
-                </div>
-            </div>`;
-    }
-
     protected override render() {
         const dashboard = this.dashboard as RdashDocument;
         
@@ -52,14 +42,13 @@ export class RvDashboardViewer extends LitElement {
         ${dashboard ? html`
             <div class="dashboard-container">
                 <div class="header">${dashboard.title}</div>
-
+                <!-- todo: filters -->
                 <div class="layout">                
                     <rv-tile-layout colCount="60" rowCount="60">
                         ${dashboard.visualizations?.map(viz => html`
-                            <rv-tile
-                                .colSpan=${viz.columnSpan}
-                                .rowSpan=${viz.rowSpan}          
-                            >${this.renderVisualization(dashboard, viz)}</rv-tile>
+                            <rv-tile .colSpan=${viz.columnSpan} .rowSpan=${viz.rowSpan}>
+                                <rv-chart-tile .dashboard=${dashboard} .visualization=${viz}></rv-chart-tile>
+                            </rv-tile>
                         `)}
                     </rv-tile-layout> 
                 </div>               
