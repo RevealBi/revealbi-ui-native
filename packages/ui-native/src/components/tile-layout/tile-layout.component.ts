@@ -61,8 +61,6 @@ export class RvTileLayout extends LitElement {
   private handleToggleMaximize(event: any) {
     event.stopPropagation();
     this.hasMaximizedTile = event.detail.maximized;
-    console.log('Maximized tile:', this.hasMaximizedTile);
-    this.requestUpdate();
   }
 
   override render() {
