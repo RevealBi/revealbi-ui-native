@@ -13,7 +13,7 @@ export class RvTileLayout extends LitElement {
       box-sizing: border-box;
       grid-template-columns: repeat(var(--col-count, 4), 1fr);
       grid-template-rows: repeat(var(--row-count, 5), 1fr);
-      gap: 10px;
+      gap: 5px;
       width: 100%;
       height: 100%;
     }
