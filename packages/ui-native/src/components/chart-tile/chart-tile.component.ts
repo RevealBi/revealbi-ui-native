@@ -15,6 +15,8 @@ export class RVChartTile extends LitElement {
 
     @property({ type: Object }) dashboard!: RdashDocument;
     @property({ type: Object }) visualization!: IVisualization;
+    @property({ type: Boolean }) showToolbar: boolean = true;
+    @property({ type: Boolean }) showLegend: boolean = true;
 
     get toolbar(): IgcToolbarComponent | null {
         return this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent
@@ -37,9 +39,16 @@ export class RVChartTile extends LitElement {
         //if it's a custom chart type, let's use the title as the key
         const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
 
+        // Reset visibility properties
+        this.showToolbar = false;
+        this.showLegend = false;
+
         const chartRenderer: IChartRenderer | undefined = ChartRegistry.getChartRenderer(chartType);
         if (chartRenderer) {
             chartRenderer.render(this.visualization, this, data ? data.value : null);
+            // Update visibility based on renderer output
+            this.showToolbar = !!this.toolbar?.children.length;
+            this.showLegend = !!this.legend?.children.length;
         } else {
             if (this.chartHost) this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
         }
@@ -49,9 +58,9 @@ export class RVChartTile extends LitElement {
         return html`
             <div class="header">
                 <div class="header-title">${this.visualization.title}</div>
-                <div id="toolbar-${this.visualization.id}" class="toolbar"></div>
+                ${this.showToolbar ? html`<div id="toolbar-${this.visualization.id}" class="toolbar"></div>` : ''}
             </div>
-            <div id="legend-${this.visualization.id}" class="legend"></div>
+            ${this.showLegend ? html`<div id="legend-${this.visualization.id}" class="legend"></div>` : ''}
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>
         `;
     }

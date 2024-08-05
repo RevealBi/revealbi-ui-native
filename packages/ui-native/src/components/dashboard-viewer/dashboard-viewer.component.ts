@@ -28,20 +28,18 @@ export class RvDashboardViewer extends LitElement {
 
     protected override render() {
         const dashboard = this.dashboard as RdashDocument;
-        
+
         return html`
         ${dashboard ? html`
-            <div class="header">${dashboard.title}</div>
-            <!-- todo: filters -->
-            <div class="layout">                
-                <rv-tile-layout colCount="60" rowCount="60">
-                    ${dashboard.visualizations?.map(viz => html`
-                        <rv-tile .colSpan=${viz.columnSpan} .rowSpan=${viz.rowSpan}>
-                            <rv-chart-tile .dashboard=${dashboard} .visualization=${viz}></rv-chart-tile>
-                        </rv-tile>
-                    `)}
-                </rv-tile-layout> 
-            </div>               
+            <rv-dashboard-header .title=${dashboard.title}></rv-dashboard-header>
+            <!-- todo: filters -->      
+            <rv-tile-layout class="layout" colCount="60" rowCount="60">
+                ${dashboard.visualizations?.map(viz => html`
+                    <rv-tile .colSpan=${viz.columnSpan} .rowSpan=${viz.rowSpan}>
+                        <rv-chart-tile .dashboard=${dashboard} .visualization=${viz}></rv-chart-tile>
+                    </rv-tile>
+                `)}
+            </rv-tile-layout>           
         ` : html`
             <div>Loading...</div>
             `}
