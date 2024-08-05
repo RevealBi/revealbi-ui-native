@@ -12,8 +12,7 @@ class KpiChartRenderer implements IChartRenderer {
         Highcharts.chart(container.chartHost, {
 
             chart: {
-                type: 'solidgauge',
-                height: 'calc(100% - 250px)',
+                type: 'solidgauge',                
             },
 
             title: {

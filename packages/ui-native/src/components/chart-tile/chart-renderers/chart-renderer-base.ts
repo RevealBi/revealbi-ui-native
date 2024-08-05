@@ -18,10 +18,12 @@ export abstract class ChartRendererBase implements IChartRenderer {
         if (table.RowCount > 0) {
             this.legend = this.createLegend();
             if (this.legend) container.chartHost.appendChild(this.legend);
-            const chart = this.createChart(visualization, this.transformData(table));
+            const chart = this.createChart(visualization, this.transformData(table)) as any;
+            chart.height = "100%";
+            chart.width = "100%";
             if ('legend' in chart) {                
                 chart.legend = this.legend;
-                chart.style.height = "calc(100% - 30px)";
+                chart.height = `calc(100% - ${this.legend?.clientHeight}px`;
             }
             this.setAdditionalChartProperties(chart, visualization);
             
@@ -35,7 +37,6 @@ export abstract class ChartRendererBase implements IChartRenderer {
         const legend = document.createElement("igc-item-legend") as IgcItemLegendComponent;
         legend.id = "legend";
         legend.orientation = LegendOrientation.Horizontal;
-        legend.style.height = "30px";
         return legend;
     }
 

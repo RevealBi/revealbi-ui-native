@@ -16,9 +16,6 @@ export class RVChartTile extends LitElement {
     @property({ type: Object }) dashboard!: RdashDocument;
     @property({ type: Object }) visualization!: IVisualization;
 
-    get container(): HTMLElement {
-        return this.shadowRoot?.getElementById(`chart-tile-container-${this.visualization.id}`) as HTMLElement;
-    }
     get header(): HTMLElement {
         return this.shadowRoot?.querySelector(".header") as HTMLElement;
     }
@@ -37,7 +34,7 @@ export class RVChartTile extends LitElement {
     }
 
     private renderChart(data: any) {
-        if (!this.container) return;
+        if (!this.chartHost) return;
 
         //if it's a custom chart type, let's use the title as the key
         const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
@@ -59,15 +56,13 @@ export class RVChartTile extends LitElement {
 
     override render() {
         return html`
-        <div id="chart-tile-container-${this.visualization.id}" class="chart-tile-container">
-            <div class="header">
+            <div id="header-${this.visualization.id}" class="header">
                 <div class="header-title">${this.visualization.title}</div>
                 <div class="toolbar">
-                    <igc-toolbar id="toolbar-${this.visualization.id}" ></igc-toolbar>
+                    <igc-toolbar id="toolbar-${this.visualization.id}"></igc-toolbar>
                 </div>
             </div>
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>
-        </div>
         `;
     }
 }

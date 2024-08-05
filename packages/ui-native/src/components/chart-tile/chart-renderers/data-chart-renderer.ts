@@ -3,6 +3,7 @@ import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
 import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryAxisBaseComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericAxisBaseComponent, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
 import { ModuleManager } from "igniteui-webcomponents-core";
+import { RVChartTile } from "../chart-tile.component";
 
 ModuleManager.register(
     IgcDataChartCoreModule,
