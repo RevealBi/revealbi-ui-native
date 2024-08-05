@@ -20,6 +20,7 @@ export default css`
     }
 
     .layout {
+      grid-column: 1;
       grid-row: 2;
     }
 `;

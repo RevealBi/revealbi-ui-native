@@ -25,6 +25,10 @@ export default css`
       font-size: 1.2em;
       font-weight: bold;
       grid-column: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%; /* Ensure the title does not exceed the container */
     }
 
     .toolbar {

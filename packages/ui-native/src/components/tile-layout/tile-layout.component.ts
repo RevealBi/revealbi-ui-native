@@ -17,6 +17,19 @@ export class RvTileLayout extends LitElement {
       width: 100%;
       height: 100%;
     }
+
+    @media (max-width: 768px) {
+      :host {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+      }
+
+      ::slotted(rv-tile) {
+        width: 100%;
+        height: 300px;
+        min-width: 300px;
+      }
+    }
   `;
 
   protected override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
