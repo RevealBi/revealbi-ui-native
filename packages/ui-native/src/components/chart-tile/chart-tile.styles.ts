@@ -9,7 +9,8 @@ export default css`
         grid-template-rows: auto auto 1fr;
         margin-left: 10px;
         margin-right: 10px;
-        margin-bottom: 10px;   
+        margin-bottom: 10px;
+        overflow: hidden;
     }
 
     .header {
