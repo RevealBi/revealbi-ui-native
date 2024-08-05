@@ -6,7 +6,7 @@ export default css`
 
     :host {
         display: grid;
-        grid-template-rows: auto 1fr;
+        grid-template-rows: auto auto 1fr;
         margin-left: 10px;
         margin-right: 10px;
         margin-bottom: 10px;   
@@ -15,9 +15,8 @@ export default css`
     .header {
         display: grid;
         grid-template-columns: 1fr auto;
-        margin-bottom: 5px;
         align-items: center;
-        height: 42px;
+        height: 40px;
         grid-row: 1;
     }
 
@@ -29,11 +28,14 @@ export default css`
 
     .toolbar {
         grid-column: 2;
-        display: block;
+    }
+
+    .legend {
+        grid-row: 2;
+        margin-bottom: 10px;
     }
 
     .chart-host {
-        grid-row: 2;
-        
+        grid-row: 3;        
     }
 `;

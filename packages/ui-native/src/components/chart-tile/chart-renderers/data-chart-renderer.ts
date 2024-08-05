@@ -1,9 +1,8 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryAxisBaseComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericAxisBaseComponent, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericAxisBaseComponent, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
 import { ModuleManager } from "igniteui-webcomponents-core";
-import { RVChartTile } from "../chart-tile.component";
 
 ModuleManager.register(
     IgcDataChartCoreModule,
@@ -25,7 +24,11 @@ export class DataChartRenderer extends ChartRendererBase {
     }
 
     override createLegend() {
-        return null;
+        const legend = document.createElement("igc-legend") as IgcLegendComponent;
+        legend.id = "legend";
+        legend.style.fontSize = "12px";
+        legend.orientation = LegendOrientation.Horizontal;
+        return legend;
     }
 
     protected override createChart(visualization: IVisualization, data: any): HTMLElement {

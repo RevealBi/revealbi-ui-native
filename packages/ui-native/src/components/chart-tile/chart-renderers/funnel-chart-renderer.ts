@@ -22,9 +22,4 @@ export class FunnelChartRenderer extends ChartRendererBase {
     transformData(data: any): any {    
         return DataTransformationService.transformPieChartData(data);
     }
-
-    protected override setAdditionalChartProperties(chart: any, visualization: any): void { 
-        chart.style.height = "calc(100% - 85px)";
-        chart.style.marginTop = "35px";
-    };
 }

@@ -22,6 +22,9 @@ export class RVChartTile extends LitElement {
     get toolbar(): IgcToolbarComponent | null {
         return this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent
     }
+    get legend(): HTMLElement {
+        return this.shadowRoot?.getElementById(`legend-${this.visualization.id}`) as HTMLElement;
+    }
     get chartHost(): HTMLElement {
         return this.shadowRoot?.getElementById(`chart-host-${this.visualization.id}`) as HTMLElement;
     }    
@@ -62,6 +65,7 @@ export class RVChartTile extends LitElement {
                     <igc-toolbar id="toolbar-${this.visualization.id}"></igc-toolbar>
                 </div>
             </div>
+            <div id="legend-${this.visualization.id}" class="legend"></div>
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>
         `;
     }

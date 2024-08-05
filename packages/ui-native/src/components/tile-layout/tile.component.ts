@@ -15,9 +15,7 @@ export class RvTile extends LitElement {
       border: 1px solid #ccc;
       border-radius: 4px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-
-      overflow: hidden; /* Prevent overflow */
+      transition: all 0.3s ease;      
     }
   `;
 
