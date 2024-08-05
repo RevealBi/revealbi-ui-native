@@ -17,6 +17,7 @@ export class RVChartTile extends LitElement {
     @property({ type: Object }) visualization!: IVisualization;
     @property({ type: Boolean }) showToolbar: boolean = true;
     @property({ type: Boolean }) showLegend: boolean = true;
+    @property({ type: Boolean, reflect: true }) maximized = false;
 
     get toolbar(): IgcToolbarComponent | null {
         return this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent
@@ -54,11 +55,23 @@ export class RVChartTile extends LitElement {
         }
     }
 
+    private requestMaximize() {
+        this.maximized = !this.maximized;
+        this.dispatchEvent(new CustomEvent('rv-tile-maximize-changed', {
+            detail: { maximized: this.maximized },
+            bubbles: true,
+            composed: true
+        }));
+    }
+
     override render() {
         return html`
             <div class="header">
                 <div class="header-title">${this.visualization.title}</div>
                 ${this.showToolbar ? html`<div id="toolbar-${this.visualization.id}" class="toolbar"></div>` : ''}
+                <button class="maximize-button" @click=${this.requestMaximize}>
+                    <span class="maximize-icon" title=${this.maximized ? "minimize" : "maximize"}></span>
+                </button>
             </div>
             ${this.showLegend ? html`<div id="legend-${this.visualization.id}" class="legend"></div>` : ''}
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>

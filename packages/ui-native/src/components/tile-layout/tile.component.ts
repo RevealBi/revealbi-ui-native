@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 export class RvTile extends LitElement {
   @property({ type: Number }) colSpan = 1;
   @property({ type: Number }) rowSpan = 1;
+  @property({ type: Boolean, reflect: true }) maximized = false;
 
   static override styles = css`
     :host {
@@ -20,13 +21,38 @@ export class RvTile extends LitElement {
       grid-row: span var(--row-span, 1);
     }
 
+    :host([maximized]) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      border-radius: 0;
+      background: white;
+    }
+
     @media (max-width: 768px) { /* Tablets and smaller */
-      :host {
-        grid-column: auto; 
+      :host(:not([maximized])) {
+        grid-column: auto;
         grid-row: auto;
       }
     }
   `;
+
+  override connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('rv-tile-maximize-changed', this.toggleMaximizeHandler);
+  }
+
+  override disconnectedCallback() {
+    this.removeEventListener('rv-tile-maximize-changed', this.toggleMaximizeHandler);
+    super.disconnectedCallback();
+  }
+
+  private toggleMaximizeHandler = (event: Event) => {
+    this.maximized = !this.maximized;
+  };
 
   protected override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     if (changedProperties.has("colSpan") || changedProperties.has("rowSpan")) {
