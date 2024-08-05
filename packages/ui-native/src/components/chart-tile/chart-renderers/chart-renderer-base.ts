@@ -3,35 +3,46 @@ import { IChartRenderer } from "../chart-render-registry";
 import { ModuleManager } from "igniteui-webcomponents-core";
 import { RVChartTile } from "../chart-tile.component";
 import { IVisualization } from "@revealbi/dom";
+import { IgcToolbarComponent } from "igniteui-webcomponents-layouts";
 
 ModuleManager.register(IgcItemLegendModule);
 
 export abstract class ChartRendererBase implements IChartRenderer {
     
-    abstract transformData(data: any): any;
+    protected abstract transformData(data: any): any;
 
     render(visualization: IVisualization, container: RVChartTile, data: any) {
         if (!container.chartHost) return;
 
         const table = data.Table;
         if (table.RowCount > 0) {
-            const legend = this.createLegend();
             const chart = this.createChart(visualization, this.transformData(table)) as any;
             chart.height = "100%";
             chart.width = "100%";
-            if ('legend' in chart) {                
-                chart.legend = legend;
+
+            const legend = this.createLegend();
+            if (legend && container.legend) {
+                if ('legend' in chart) {                
+                    chart.legend = legend;
+                }
+                container.legend.appendChild(legend);
             }
+
+            const toolbar = this.createToolbar();
+            if (toolbar && container.toolbar) {
+                toolbar.target = chart;
+                container.toolbar.appendChild(toolbar);
+            }
+
             this.setAdditionalChartProperties(chart, visualization);
             
-            if (legend) container.legend.appendChild(legend);
             container.chartHost.appendChild(chart);
         } else {
             container.chartHost.innerHTML = "<div>No data available</div>";
         }
     }
 
-    createLegend(): IgcItemLegendComponent | IgcLegendComponent | null {
+    protected createLegend(): IgcItemLegendComponent | IgcLegendComponent | null {
         const legend = document.createElement("igc-item-legend") as IgcItemLegendComponent;
         legend.id = "legend";
         legend.style.fontSize = "12px";
@@ -40,6 +51,10 @@ export abstract class ChartRendererBase implements IChartRenderer {
     }
 
     protected abstract createChart(visualization: IVisualization, data: any): HTMLElement;
+
+    protected createToolbar(): IgcToolbarComponent | undefined | null {
+        return undefined;
+    }
 
     protected setAdditionalChartProperties(chart: any, visualization: IVisualization): void { };
 }
