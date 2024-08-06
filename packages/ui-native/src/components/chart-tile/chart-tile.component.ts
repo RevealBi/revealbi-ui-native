@@ -57,7 +57,7 @@ export class RVChartTile extends LitElement {
     private async handleFilterChanged(e: any) {
         //todo: we need ot check to see if the viz has a binfing to the filter
         const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization, { filter: e.detail.filter, selectedValue: e.detail.selectedValue });
-        this.updateChart(data);        
+        this.updateChart(data, e.detail);        
     }
 
     private initializeRenderer() {
@@ -79,9 +79,9 @@ export class RVChartTile extends LitElement {
         }
     }
 
-    private updateChart(data: any) {
+    private updateChart(data: any, updateArgs: any) {
         if (this.chartRenderer) {
-            this.chartRenderer.update(data ? data.value : null);
+            this.chartRenderer.filterUpdated(data ? data.value : null, updateArgs);
             this.showToolbar = !!this.toolbar?.children.length;
             this.showLegend = !!this.legend?.children.length;
         } else {

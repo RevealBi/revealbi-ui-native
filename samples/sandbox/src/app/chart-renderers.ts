@@ -3,7 +3,7 @@ import { ChartRegistry, IChartRenderer, RVChartTile } from "@revealbi/ui-native"
 declare let Highcharts: any;
 
 class KpiChartRenderer implements IChartRenderer {
-    update(data: any): void {
+    filterUpdated(data: any): void {
         console.log("update not implemented");
     }
 

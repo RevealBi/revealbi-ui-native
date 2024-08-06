@@ -37,22 +37,22 @@ export class DataChartRenderer extends ChartRendererBase {
         return document.createElement("igc-toolbar") as IgcToolbarComponent;
     }
 
-    override update(data: any): void {
+    override filterUpdated(data: any, updateArgs: any): void {
         const processedData = DataTransformationService.transformData_TEST(data.Table);
-
         const chart = this.chart as IgcDataChartComponent;
         if (chart) {
-            chart.highlightedDataSource = processedData;
-            chart.highlightingMode = SeriesHighlightingMode.FadeOthers;
-            chart.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Overlay;
+            for (let i = 0; i < this.chart.series.count; i++) {
+                let currSeries = this.chart.series.item(i);
+                if (updateArgs.removeFilter) {
+                    currSeries.shouldRemoveHighlightedDataOnLayerHidden = true;
+                    currSeries.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Hidden;
+                } else {
+                    currSeries.shouldRemoveHighlightedDataOnLayerHidden = false;
+                    currSeries.highlightedDataSource = processedData;
+                    currSeries.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Overlay;
+                }
+            }
         }
-
-        // for (let i = 0; i < this.chart.axes.count; i++) {
-        //     this.chart.axes.item(i).dataSource = processedData;
-        // }
-        // for (let i = 0; i < this.chart.series.count; i++) {
-        //     this.chart.series.item(i).dataSource = processedData;
-        // }
     }
 
     protected override createChart(visualization: IVisualization, data: any): HTMLElement | null {
@@ -134,10 +134,10 @@ export class DataChartRenderer extends ChartRendererBase {
     public createSeries(type: ChartType, fieldName: string) {
         const series = document.createElement(this.createSeriesName(type)) as IgcHorizontalAnchoredCategorySeriesComponent;
         series.title = fieldName;
-        series.valueMemberPath = fieldName;    
-        series.isTransitionInEnabled = true;    
+        series.valueMemberPath = fieldName;
+        series.isTransitionInEnabled = true;
         return series;
-        
+
     }
 
     public createTooltip(): IgcDataToolTipLayerComponent {

@@ -11,7 +11,7 @@ export abstract class ChartRendererBase implements IChartRenderer {
 
     chart: any;
     
-    update(data: any): void {
+    filterUpdated(data: any, updateArgs: any): void {
         if (!data.Table) { return; }
         if (!this.chart) { return; }        
         this.chart.dataSource = this.transformData(data.Table);

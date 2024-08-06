@@ -91,7 +91,8 @@ export class RvDashboardFilter extends LitElement {
                 const event = new CustomEvent("rv-dashboard-filter-changed", {
                     detail: {
                         filter: this.datafilter,
-                        selectedValue: editor.value
+                        selectedValue: editor.value,
+                        removeFilter: editor.value === "All"
                     }
                 });
                 document.dispatchEvent(event);
