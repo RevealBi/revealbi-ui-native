@@ -32,7 +32,7 @@ export class RvDashboardViewer extends LitElement {
         return html`
         ${dashboard ? html`
             <rv-dashboard-header .title=${dashboard.title}></rv-dashboard-header>
-            <!-- todo: filters -->      
+            <rv-dashboard-filters class="filters" .dashboard=${dashboard} .filters=${dashboard.filters}></rv-dashboard-filters>
             <rv-tile-layout class="layout" colCount="60" rowCount="60">
                 ${dashboard.visualizations?.map(viz => html`
                     <rv-tile .colSpan=${viz.columnSpan} .rowSpan=${viz.rowSpan}>

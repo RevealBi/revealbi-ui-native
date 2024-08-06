@@ -1,8 +1,8 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
-import { ModuleManager } from "igniteui-webcomponents-core";
+import { AutoMarginsAndAngleUpdateMode, ConsolidatedItemsPosition, IgcCalloutLayerModule, IgcCategorySeriesComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightedValuesDisplayMode, SeriesHighlightedValuesDisplayMode_$type, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { ColumnSeriesDescriptionModule, ModuleManager } from "igniteui-webcomponents-core";
 import { IgcToolbarComponent, IgcToolbarModule } from "igniteui-webcomponents-layouts";
 
 ModuleManager.register(
@@ -37,8 +37,29 @@ export class DataChartRenderer extends ChartRendererBase {
         return document.createElement("igc-toolbar") as IgcToolbarComponent;
     }
 
-    protected override createChart(visualization: IVisualization, data: any): HTMLElement {
+    override filterUpdated(data: any, updateArgs: any): void {
+        const processedData = DataTransformationService.transformData_TEST(data.Table);
+        const chart = this.chart as IgcDataChartComponent;
+        if (chart) {
+            for (let i = 0; i < this.chart.series.count; i++) {
+                let currSeries = this.chart.series.item(i);
+                if (updateArgs.removeFilter) {
+                    currSeries.shouldRemoveHighlightedDataOnLayerHidden = true;
+                    currSeries.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Hidden;
+                } else {
+                    currSeries.shouldRemoveHighlightedDataOnLayerHidden = false;
+                    currSeries.highlightedDataSource = processedData;
+                    currSeries.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Overlay;
+                }
+            }
+        }
+    }
+
+    protected override createChart(visualization: IVisualization, data: any): HTMLElement | null {
         const processedData = DataTransformationService.transformData_TEST(data);
+        if (!processedData || processedData.length == 0) {
+            return null;
+        }
 
         const chart = document.createElement("igc-data-chart") as IgcDataChartComponent;
         chart.shouldAutoExpandMarginForInitialLabels = true;
@@ -113,9 +134,10 @@ export class DataChartRenderer extends ChartRendererBase {
     public createSeries(type: ChartType, fieldName: string) {
         const series = document.createElement(this.createSeriesName(type)) as IgcHorizontalAnchoredCategorySeriesComponent;
         series.title = fieldName;
-        series.valueMemberPath = fieldName;        
+        series.valueMemberPath = fieldName;
+        series.isTransitionInEnabled = true;
         return series;
-        
+
     }
 
     public createTooltip(): IgcDataToolTipLayerComponent {
