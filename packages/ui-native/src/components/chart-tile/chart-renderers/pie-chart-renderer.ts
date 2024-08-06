@@ -21,7 +21,7 @@ export class PieChartRenderer extends ChartRendererBase {
         return chart;
     }
 
-    transformData(data: any): any {    
+    protected override transformData(data: any): any {    
         return DataTransformationService.transformPieChartData(data);
     }
 }

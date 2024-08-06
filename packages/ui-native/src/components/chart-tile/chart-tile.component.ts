@@ -60,32 +60,12 @@ export class RVChartTile extends LitElement {
         this.updateChart(data);        
     }
 
-    // private renderChart(data: any) {
-    //     //if it's a custom chart type, let's use the title as the key
-    //     const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
-
-    //     // Reset visibility properties
-    //     this.showToolbar = false;
-    //     this.showLegend = false;
-
-    //     if (!this.chartRenderer) this.chartRenderer = ChartRegistry.getChartRenderer(chartType);
-    //     if (this.chartRenderer) {
-    //         this.chartRenderer.render(this.visualization, this, data ? data.value : null);
-    //         // Update visibility based on renderer output
-    //         this.showToolbar = !!this.toolbar?.children.length;
-    //         this.showLegend = !!this.legend?.children.length;
-    //     } else {
-    //         if (this.chartHost) this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
-    //     }
-    // }
-
     private initializeRenderer() {
         if (!this.chartRenderer) {
             const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
             this.chartRenderer = ChartRegistry.getChartRenderer(chartType);
         }
     }
-
 
     private renderChart(data: any) {
         if (this.chartRenderer) {

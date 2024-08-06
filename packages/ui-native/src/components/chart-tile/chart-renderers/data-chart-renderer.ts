@@ -1,7 +1,7 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, ConsolidatedItemsPosition, IgcCalloutLayerModule, IgcCategorySeriesComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { AutoMarginsAndAngleUpdateMode, ConsolidatedItemsPosition, IgcCalloutLayerModule, IgcCategorySeriesComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightedValuesDisplayMode, SeriesHighlightedValuesDisplayMode_$type, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
 import { ColumnSeriesDescriptionModule, ModuleManager } from "igniteui-webcomponents-core";
 import { IgcToolbarComponent, IgcToolbarModule } from "igniteui-webcomponents-layouts";
 
@@ -40,16 +40,26 @@ export class DataChartRenderer extends ChartRendererBase {
     override update(data: any): void {
         const processedData = DataTransformationService.transformData_TEST(data.Table);
 
-        for (let i = 0; i < this.chart.axes.count; i++) {
-            this.chart.axes.item(i).dataSource = processedData;
+        const chart = this.chart as IgcDataChartComponent;
+        if (chart) {
+            chart.highlightedDataSource = processedData;
+            chart.highlightingMode = SeriesHighlightingMode.FadeOthers;
+            chart.highlightedValuesDisplayMode = SeriesHighlightedValuesDisplayMode.Overlay;
         }
-        for (let i = 0; i < this.chart.series.count; i++) {
-            this.chart.series.item(i).dataSource = processedData;
-        }
+
+        // for (let i = 0; i < this.chart.axes.count; i++) {
+        //     this.chart.axes.item(i).dataSource = processedData;
+        // }
+        // for (let i = 0; i < this.chart.series.count; i++) {
+        //     this.chart.series.item(i).dataSource = processedData;
+        // }
     }
 
-    protected override createChart(visualization: IVisualization, data: any): HTMLElement {
+    protected override createChart(visualization: IVisualization, data: any): HTMLElement | null {
         const processedData = DataTransformationService.transformData_TEST(data);
+        if (!processedData || processedData.length == 0) {
+            return null;
+        }
 
         const chart = document.createElement("igc-data-chart") as IgcDataChartComponent;
         chart.shouldAutoExpandMarginForInitialLabels = true;

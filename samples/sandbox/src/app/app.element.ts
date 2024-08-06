@@ -18,6 +18,7 @@ export class AppElement extends HTMLElement {
           <option value="Campaigns">Campaigns</option>
           <option value="Sales">Sales</option>      
           <option value="Marketing">Marketing</option>
+          <option value="Manufacturing">Manufacturing</option>
         </select>
       </div>
 

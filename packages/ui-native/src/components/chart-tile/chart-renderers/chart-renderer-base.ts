@@ -13,6 +13,7 @@ export abstract class ChartRendererBase implements IChartRenderer {
     
     update(data: any): void {
         if (!data.Table) { return; }
+        if (!this.chart) { return; }        
         this.chart.dataSource = this.transformData(data.Table);
     }
     
@@ -29,7 +30,18 @@ export abstract class ChartRendererBase implements IChartRenderer {
 
         const table = data.Table;
         if (table.RowCount > 0) {
-            this.chart = this.createChart(visualization, this.transformData(table)) as any;
+            const data = this.transformData(table);
+            if (!data || data.length === 0) {
+                container.chartHost.innerHTML = "<div>No data available</div>";
+                return;
+            }
+
+            this.chart = this.createChart(visualization, data) as any;
+            if (this.chart === null) {
+                container.chartHost.innerHTML = "<div>No data available</div>";
+                return;
+            }
+
             this.chart.height = "100%";
             this.chart.width = "100%";
 
@@ -63,7 +75,7 @@ export abstract class ChartRendererBase implements IChartRenderer {
         return legend;
     }
 
-    protected abstract createChart(visualization: IVisualization, data: any): HTMLElement;
+    protected abstract createChart(visualization: IVisualization, data: any): HTMLElement | null;
 
     protected createToolbar(): IgcToolbarComponent | undefined | null {
         return undefined;
