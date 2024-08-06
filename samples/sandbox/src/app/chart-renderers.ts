@@ -3,6 +3,9 @@ import { ChartRegistry, IChartRenderer, RVChartTile } from "@revealbi/ui-native"
 declare let Highcharts: any;
 
 class KpiChartRenderer implements IChartRenderer {
+    update(data: any): void {
+        console.log("update not implemented");
+    }
 
     render(visualization: IVisualization, container: RVChartTile, data: any) {
         const trackColors = Highcharts.getOptions().colors.map((color: any) =>

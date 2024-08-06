@@ -1,8 +1,8 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
-import { ModuleManager } from "igniteui-webcomponents-core";
+import { AutoMarginsAndAngleUpdateMode, ConsolidatedItemsPosition, IgcCalloutLayerModule, IgcCategorySeriesComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { ColumnSeriesDescriptionModule, ModuleManager } from "igniteui-webcomponents-core";
 import { IgcToolbarComponent, IgcToolbarModule } from "igniteui-webcomponents-layouts";
 
 ModuleManager.register(
@@ -35,6 +35,17 @@ export class DataChartRenderer extends ChartRendererBase {
 
     protected override createToolbar(): IgcToolbarComponent {
         return document.createElement("igc-toolbar") as IgcToolbarComponent;
+    }
+
+    override update(data: any): void {
+        const processedData = DataTransformationService.transformData_TEST(data.Table);
+
+        for (let i = 0; i < this.chart.axes.count; i++) {
+            this.chart.axes.item(i).dataSource = processedData;
+        }
+        for (let i = 0; i < this.chart.series.count; i++) {
+            this.chart.series.item(i).dataSource = processedData;
+        }
     }
 
     protected override createChart(visualization: IVisualization, data: any): HTMLElement {
@@ -113,7 +124,8 @@ export class DataChartRenderer extends ChartRendererBase {
     public createSeries(type: ChartType, fieldName: string) {
         const series = document.createElement(this.createSeriesName(type)) as IgcHorizontalAnchoredCategorySeriesComponent;
         series.title = fieldName;
-        series.valueMemberPath = fieldName;        
+        series.valueMemberPath = fieldName;    
+        series.isTransitionInEnabled = true;    
         return series;
         
     }

@@ -7,6 +7,7 @@ import { RVChartTile } from "./chart-tile.component";
 
 export interface IChartRenderer {
     render(visualization: IVisualization, container: RVChartTile, data: any): void;
+    update(data: any): void;
 }
 
 export class ChartRegistry {

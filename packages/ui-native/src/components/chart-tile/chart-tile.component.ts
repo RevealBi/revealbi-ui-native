@@ -19,6 +19,8 @@ export class RVChartTile extends LitElement {
     @property({ type: Boolean }) showLegend: boolean = true;
     @property({ type: Boolean, reflect: true }) maximized = false;
 
+    private chartRenderer: IChartRenderer | undefined;
+
     get toolbar(): IgcToolbarComponent | null {
         return this.shadowRoot?.getElementById(`toolbar-${this.visualization.id}`) as IgcToolbarComponent
     }
@@ -46,32 +48,66 @@ export class RVChartTile extends LitElement {
 
     protected override async updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         if (changedProperties.has("visualization") && this.visualization) {
+            this.initializeRenderer();
             const data = await DataService.fetchVisualizationData(this.dashboard, this.visualization, null);
             this.renderChart(data);
         }
     }
 
     private async handleFilterChanged(e: any) {
+        //todo: we need ot check to see if the viz has a binfing to the filter
         const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization, { filter: e.detail.filter, selectedValue: e.detail.selectedValue });
-        this.renderChart(data);        
+        this.updateChart(data);        
     }
 
+    // private renderChart(data: any) {
+    //     //if it's a custom chart type, let's use the title as the key
+    //     const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
+
+    //     // Reset visibility properties
+    //     this.showToolbar = false;
+    //     this.showLegend = false;
+
+    //     if (!this.chartRenderer) this.chartRenderer = ChartRegistry.getChartRenderer(chartType);
+    //     if (this.chartRenderer) {
+    //         this.chartRenderer.render(this.visualization, this, data ? data.value : null);
+    //         // Update visibility based on renderer output
+    //         this.showToolbar = !!this.toolbar?.children.length;
+    //         this.showLegend = !!this.legend?.children.length;
+    //     } else {
+    //         if (this.chartHost) this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
+    //     }
+    // }
+
+    private initializeRenderer() {
+        if (!this.chartRenderer) {
+            const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
+            this.chartRenderer = ChartRegistry.getChartRenderer(chartType);
+        }
+    }
+
+
     private renderChart(data: any) {
-        //if it's a custom chart type, let's use the title as the key
-        const chartType: ChartType | string = this.visualization.chartType === ChartType.Custom ? this.visualization.title ?? "" : this.visualization.chartType;
-
-        // Reset visibility properties
-        this.showToolbar = false;
-        this.showLegend = false;
-
-        const chartRenderer: IChartRenderer | undefined = ChartRegistry.getChartRenderer(chartType);
-        if (chartRenderer) {
-            chartRenderer.render(this.visualization, this, data ? data.value : null);
-            // Update visibility based on renderer output
+        if (this.chartRenderer) {
+            this.chartRenderer.render(this.visualization, this, data ? data.value : null);
             this.showToolbar = !!this.toolbar?.children.length;
             this.showLegend = !!this.legend?.children.length;
         } else {
-            if (this.chartHost) this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
+            if (this.chartHost) {
+                this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
+            }
+        }
+    }
+
+    private updateChart(data: any) {
+        if (this.chartRenderer) {
+            this.chartRenderer.update(data ? data.value : null);
+            this.showToolbar = !!this.toolbar?.children.length;
+            this.showLegend = !!this.legend?.children.length;
+        } else {
+            if (this.chartHost) {
+                this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
+            }
         }
     }
 

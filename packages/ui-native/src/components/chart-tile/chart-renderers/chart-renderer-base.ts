@@ -8,6 +8,13 @@ import { IgcToolbarComponent } from "igniteui-webcomponents-layouts";
 ModuleManager.register(IgcItemLegendModule);
 
 export abstract class ChartRendererBase implements IChartRenderer {
+
+    chart: any;
+    
+    update(data: any): void {
+        if (!data.Table) { return; }
+        this.chart.dataSource = this.transformData(data.Table);
+    }
     
     protected abstract transformData(data: any): any;
 
@@ -22,27 +29,27 @@ export abstract class ChartRendererBase implements IChartRenderer {
 
         const table = data.Table;
         if (table.RowCount > 0) {
-            const chart = this.createChart(visualization, this.transformData(table)) as any;
-            chart.height = "100%";
-            chart.width = "100%";
+            this.chart = this.createChart(visualization, this.transformData(table)) as any;
+            this.chart.height = "100%";
+            this.chart.width = "100%";
 
             const legend = this.createLegend();
             if (legend && container.legend) {
-                if ('legend' in chart) {                
-                    chart.legend = legend;
+                if ('legend' in this.chart) {                
+                    this.chart.legend = legend;
                 }
                 container.legend.appendChild(legend);
             }
 
             const toolbar = this.createToolbar();
             if (toolbar && container.toolbar) {
-                toolbar.target = chart;
+                toolbar.target = this.chart;
                 container.toolbar.appendChild(toolbar);
             }
 
-            this.setAdditionalChartProperties(chart, visualization);
+            this.setAdditionalChartProperties(this.chart, visualization);
             
-            container.chartHost.appendChild(chart);
+            container.chartHost.appendChild(this.chart);
         } else {
             container.chartHost.innerHTML = "<div>No data available</div>";
         }
