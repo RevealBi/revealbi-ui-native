@@ -27,13 +27,33 @@ export class RVChartTile extends LitElement {
     }
     get chartHost(): HTMLElement {
         return this.shadowRoot?.getElementById(`chart-host-${this.visualization.id}`) as HTMLElement;
-    }    
+    }  
+    
+    constructor() {
+        super();
+        this.handleFilterChanged = this.handleFilterChanged.bind(this);
+    }
+
+    override connectedCallback() {
+        super.connectedCallback();
+        document.addEventListener("rv-dashboard-filter-changed", this.handleFilterChanged);
+    }
+
+    override disconnectedCallback() {
+        super.disconnectedCallback();
+        document.removeEventListener("rv-dashboard-filter-changed", this.handleFilterChanged);
+    }
 
     protected override async updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
         if (changedProperties.has("visualization") && this.visualization) {
-            const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization);
+            const data = await DataService.fetchVisualizationData(this.dashboard, this.visualization, null);
             this.renderChart(data);
         }
+    }
+
+    private async handleFilterChanged(e: any) {
+        const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization, { filter: e.detail.filter, selectedValue: e.detail.selectedValue });
+        this.renderChart(data);        
     }
 
     private renderChart(data: any) {

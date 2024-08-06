@@ -1,15 +1,39 @@
-import { JsonConvert, RdashDocument } from "@revealbi/dom";
+import { DashboardDataFilter, DashboardDateFilter, FilterItem, JsonConvert, RdashDocument } from "@revealbi/dom";
 import { RevealSdkSettings } from "../RevealSdkSettings";
 
 export class DataService {
-    static async fetchVisualizationData(dashboard: RdashDocument, visualization: any) {
+    static async fetchVisualizationData(dashboard: RdashDocument, visualization: any, filter: any) {
         const dataEndpoint = `${RevealSdkSettings.serverUrl}dashboard/editor/widget/data`;
-        const viz = JsonConvert.serialize(visualization);
-        let dataSources: string[] = [];
-        dashboard?.dataSources.forEach((dataSource) => {
-            const ds = JsonConvert.serialize(dataSource);
-            dataSources.push(JSON.parse(ds));
-        });
+
+        //we don't want to parse the entire dashboard, so let's just parse what we care about.
+        const temp = new RdashDocument();
+        temp.dataSources = dashboard.dataSources;
+        temp.filters = dashboard.filters;
+        temp.visualizations = [visualization];
+
+        const json = JsonConvert.serialize(temp);
+        const jsonObject = JSON.parse(json); 
+        const dataSources = jsonObject.DataSources;
+        const globalDateFilter = jsonObject.GlobalFilters.find((f: any) => f.Id === "_date");
+        const selectedWidget = jsonObject.Widgets[0];
+
+        const globalFilters: any = {};
+        if (filter && filter.selectedValue !== "All") {
+            const modifiedFilter = temp.filters.find((f: any) => f.id === filter.filter.id) as DashboardDataFilter;
+            const fieldName = modifiedFilter.selectedFieldName ?? "";
+
+            const filterItem = new FilterItem();
+            filterItem.fieldValues = { [fieldName]:  filter.selectedValue };
+            const convertedFilterItem = JSON.parse(JsonConvert.serialize(filterItem));
+
+            globalFilters[filter.filter.id] = [ convertedFilterItem ]
+        } else {
+            dashboard.filters.forEach((f: any) => {
+                if (f.id !== "_date"){
+                    globalFilters[f.id] = [];
+                }
+            });
+        }
 
         try {
             const response = await fetch(dataEndpoint, {
@@ -20,11 +44,57 @@ export class DataService {
                 body: JSON.stringify({
                     dashboardId: dashboard.title,
                     dataSources: dataSources,
-                    globalFilters: undefined, //todo: implement global filters
-                    globalDateFilter: undefined, //todo: implement global date filter
+                    globalFilters: globalFilters,
+                    globalDateFilter: globalDateFilter,
                     maxCells: 100000,
                     refresh: false,
-                    selectedWidget: JSON.parse(viz),
+                    selectedWidget: selectedWidget,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data from ${dataEndpoint}`);
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    static async fetchFilterData(dashboard: RdashDocument, filter: DashboardDateFilter | DashboardDataFilter) {
+        const dataEndpoint = `${RevealSdkSettings.serverUrl}dashboard/editor/filters/global`;
+
+        //we don't want to parse the entire dashboard, so let's just parse what we care about.
+        const temp = new RdashDocument();
+        temp.dataSources = dashboard.dataSources;
+        temp.filters = dashboard.filters;
+        
+        const json = JsonConvert.serialize(temp);
+        const jsonObject = JSON.parse(json); 
+        const dataSources = jsonObject.DataSources;
+        const globalFilters = jsonObject.GlobalFilters;
+        const globalFilter = jsonObject.GlobalFilters.find((f: any) => f.Id === filter.id);     
+        
+        const requiredFields = [];
+        const dataFilter = filter as DashboardDataFilter;
+        if (dataFilter) {
+            requiredFields.push(dataFilter.selectedFieldName);
+        }        
+
+        try {
+            const response = await fetch(dataEndpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    CacheSettings: cacheSettings, //todo: don't know what this is or how to get it
+                    Context: context, //todo: don't know what this is or how to get it
+                    GlobalFilter: globalFilter, //this is the filter being passed in
+                    dataSources: dataSources,
+                    gloablFilters: globalFilters, //this is all filters
+                    requiredFields: requiredFields, //todo: don't know what this is or how to get it
+                    returnSelectedValuesOnly: false, //does this ever chn=ange?
                 }),
             });
             if (!response.ok) {
@@ -137,3 +207,47 @@ export class DashboardService {
         }
     }
 }
+
+
+
+//todo: need to build up the filter data structure like this
+//no filer applied looks like "51c8175b-2982-4d62-0022-19779e54cb0c": []
+const test = {
+    "51c8175b-2982-4d62-0022-19779e54cb0c": [
+        {
+            "FieldValues": {
+                "CampaignID": "Amethyst"
+            },
+            "ExpansionPath": []
+        }
+    ]
+}
+
+//todo: where do I get this damn things
+const cacheSettings = {
+    "SkipCache": false,
+    "SkipDataCache": false,
+    "SkipDatasetCache": false,
+    "SkipResourceCache": false,
+    "NotOlderThan": {
+        "_type": "date",
+        "value": "2024-08-05T03:12:30.000Z"
+    },
+    "Refresh": false
+}
+
+//todo: where do I get this?
+const context = {
+    "_type": "GlobalFilterContextType",
+    "UserTimeZone": "America/Denver",
+    "GlobalFiltersContext": {},
+    "GlobalVariablesContext": {},
+    "DateGlobalFilter": {
+        "_type": "DateGlobalFilterType",
+        "Id": "_date",
+        "Title": "Date Filter",
+        "RuleType": "TrailingTwelveMonths",
+        "IncludeToday": true
+    }
+}
+

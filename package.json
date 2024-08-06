@@ -5,7 +5,7 @@
   "scripts": {},
   "private": true,
   "dependencies": {
-    "@revealbi/dom": "^0.0.12",
+    "@revealbi/dom": "^0.0.13",
     "igniteui-webcomponents-charts": "^4.8.1",
     "igniteui-webcomponents-core": "^4.8.1",
     "igniteui-webcomponents-inputs": "^4.8.1",

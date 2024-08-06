@@ -7,7 +7,7 @@ export default css`
     :host {
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: auto auto 1fr;
       padding: 10px;
       height: 100%;
     }
@@ -19,8 +19,12 @@ export default css`
       margin-bottom: 10px;
     }
 
-    .layout {
-      grid-column: 1;
+    .filters {
       grid-row: 2;
+      margin-bottom: 10px;
+    }
+
+    .layout {
+      grid-row: 3;
     }
 `;

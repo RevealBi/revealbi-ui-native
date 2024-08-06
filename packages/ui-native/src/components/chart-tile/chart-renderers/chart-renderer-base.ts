@@ -12,7 +12,13 @@ export abstract class ChartRendererBase implements IChartRenderer {
     protected abstract transformData(data: any): any;
 
     render(visualization: IVisualization, container: RVChartTile, data: any) {
+        if (!data.Table) { return; }
         if (!container.chartHost) return;
+
+        //in the future we do not want to recreate the chart every time, we want to update it.
+        if (container.toolbar) container.toolbar.innerHTML = "";
+        if (container.legend) container.legend.innerHTML = "";
+        container.chartHost.innerHTML = "";
 
         const table = data.Table;
         if (table.RowCount > 0) {
