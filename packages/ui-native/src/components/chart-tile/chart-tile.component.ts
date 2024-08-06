@@ -55,7 +55,7 @@ export class RVChartTile extends LitElement {
     }
 
     private async handleFilterChanged(e: any) {
-        //todo: we need ot check to see if the viz has a binfing to the filter
+        //todo: we need to check to see if the viz has a binding to the filter
         const data = await DataService.fetchVisualizationData(this.dashboard as RdashDocument, this.visualization, { filter: e.detail.filter, selectedValue: e.detail.selectedValue });
         this.updateChart(data, e.detail);        
     }
@@ -91,23 +91,11 @@ export class RVChartTile extends LitElement {
         }
     }
 
-    private requestMaximize() {
-        this.maximized = !this.maximized;
-        this.dispatchEvent(new CustomEvent('rv-tile-maximize-changed', {
-            detail: { maximized: this.maximized },
-            bubbles: true,
-            composed: true
-        }));
-    }
-
     override render() {
         return html`
             <div class="header">
                 <div class="header-title">${this.visualization.title}</div>
                 ${this.showToolbar ? html`<div id="toolbar-${this.visualization.id}" class="toolbar"></div>` : ''}
-                <button class="maximize-button" @click=${this.requestMaximize}>
-                    <span class="maximize-icon" title=${this.maximized ? "minimize" : "maximize"}></span>
-                </button>
             </div>
             ${this.showLegend ? html`<div id="legend-${this.visualization.id}" class="legend"></div>` : ''}
             <div id="chart-host-${this.visualization.id}" class="chart-host"></div>

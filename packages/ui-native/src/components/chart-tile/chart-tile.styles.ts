@@ -43,28 +43,6 @@ export default css`
         margin-bottom: 10px;
     }
 
-    .maximize-button {
-        grid-column: 3;
-        background: rgba(255, 255, 255, 0.8);
-        border: none;
-        cursor: pointer;
-        padding: 5px;
-        border-radius: 3px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-    }
-    .maximize-icon {
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        transform: rotate(15deg);
-        border-right: 2px solid rgb(0, 0, 0);
-        border-top: 2px solid rgb(0, 0, 0);
-    }
-
     .chart-host {
         grid-row: 3;        
     }

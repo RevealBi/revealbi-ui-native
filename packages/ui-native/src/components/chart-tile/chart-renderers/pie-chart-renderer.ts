@@ -1,6 +1,6 @@
 import { IgcPieChartComponent, IgcPieChartModule } from "igniteui-webcomponents-charts";
 import { ChartRendererBase } from "./chart-renderer-base";
-import { IVisualData, ModuleManager } from "igniteui-webcomponents-core";
+import { ModuleManager } from "igniteui-webcomponents-core";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
 import { IVisualization, PieChartVisualization } from "@revealbi/dom";
 

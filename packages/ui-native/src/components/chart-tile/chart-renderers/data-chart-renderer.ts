@@ -1,9 +1,9 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
 import { DataTransformationService } from "packages/ui-native/src/data/data-service";
-import { AutoMarginsAndAngleUpdateMode, ConsolidatedItemsPosition, IgcCalloutLayerModule, IgcCategorySeriesComponent, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightedValuesDisplayMode, SeriesHighlightedValuesDisplayMode_$type, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
-import { ColumnSeriesDescriptionModule, ModuleManager } from "igniteui-webcomponents-core";
-import { IgcToolbarComponent, IgcToolbarModule } from "igniteui-webcomponents-layouts";
+import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightedValuesDisplayMode, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
+import { ModuleManager } from "igniteui-webcomponents-core";
+import { IgcToolbarModule } from "igniteui-webcomponents-layouts";
 
 ModuleManager.register(
     IgcDataChartCoreModule,
@@ -31,10 +31,6 @@ export class DataChartRenderer extends ChartRendererBase {
         legend.style.fontSize = "12px";
         legend.orientation = LegendOrientation.Horizontal;
         return legend;
-    }
-
-    protected override createToolbar(): IgcToolbarComponent {
-        return document.createElement("igc-toolbar") as IgcToolbarComponent;
     }
 
     override filterUpdated(data: any, updateArgs: any): void {
