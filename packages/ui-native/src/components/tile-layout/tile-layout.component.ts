@@ -15,14 +15,6 @@ export class RvTileLayout extends LitElement {
       grid-template-columns: repeat(var(--col-count, 4), 1fr);
       grid-template-rows: repeat(var(--row-count, 5), 1fr);
       gap: 5px;
-      /* width: 100%;
-      height: 100%; */
-    }
-
-    :host([has-maximized-tile]) {
-      display: block;
-      grid-template-columns: none;
-      grid-template-rows: none;
     }
 
     @media (max-width: 768px) {
@@ -61,7 +53,6 @@ export class RvTileLayout extends LitElement {
   private handleToggleMaximize(event: any) {
     event.stopPropagation();
     this.hasMaximizedTile = event.detail.maximized;
-    console.log('tile-layout-maximized', this.hasMaximizedTile);
   }
 
   override render() {

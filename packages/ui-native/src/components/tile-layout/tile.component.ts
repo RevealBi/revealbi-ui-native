@@ -29,7 +29,6 @@ export class RvTile extends LitElement {
       height: 100%;
       z-index: 1000;
       border-radius: 0;
-      background: white;
     }
 
     @media (max-width: 768px) { /* Tablets and smaller */
@@ -52,7 +51,6 @@ export class RvTile extends LitElement {
 
   private toggleMaximizeHandler = (event: any) => {
     this.maximized = event.detail.maximized;
-    console.log('tile-maximized', this.maximized);
   };
 
   protected override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
