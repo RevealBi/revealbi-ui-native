@@ -50,8 +50,9 @@ export class RvTile extends LitElement {
     super.disconnectedCallback();
   }
 
-  private toggleMaximizeHandler = (event: Event) => {
-    this.maximized = !this.maximized;
+  private toggleMaximizeHandler = (event: any) => {
+    this.maximized = event.detail.maximized;
+    console.log('tile-maximized', this.maximized);
   };
 
   protected override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
