@@ -12,9 +12,6 @@ export default css`
         margin-bottom: 10px;
         overflow: hidden;
     }
-    :host([maximized]) .maximize-icon {
-        transform: rotate(180deg);
-    }
 
     .header {
         display: grid;
