@@ -142,6 +142,8 @@ export class DataChartRenderer extends ChartRendererBase {
 
     createSeriesName(type: ChartType) {
         switch (type) {
+            case ChartType.Area:
+                return "igc-area-series";
             case ChartType.Column:
                 return "igc-column-series";
             case ChartType.Line:

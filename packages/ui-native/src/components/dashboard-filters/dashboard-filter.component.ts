@@ -8,8 +8,6 @@ import { IgcDatePickerModule } from "igniteui-webcomponents-inputs";
 
 ModuleManager.register(IgcDatePickerModule);
 
-//get data from - https://samples.revealbi.io/upmedia/reveal-api/Dashboard/editor/filters/global
-
 @customElement("rv-dashboard-filter")
 export class RvDashboardFilter extends LitElement {
     @property({ type: Object }) dashboard: RdashDocument = new RdashDocument();
@@ -53,8 +51,8 @@ export class RvDashboardFilter extends LitElement {
         const editorHost = this.shadowRoot?.getElementById("editorHost");
 
         if (this.dateFilter) {
-            const editor = document.createElement("igc-date-picker");
-            editor.style.width = "125px";
+            const editor = document.createElement("div");
+            editor.innerHTML = this.dateFilter.ruleType;
             editorHost?.appendChild(editor);
         } else {
             const editor = document.createElement("select");

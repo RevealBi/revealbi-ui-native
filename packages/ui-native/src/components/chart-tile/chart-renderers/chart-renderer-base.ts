@@ -13,6 +13,7 @@ export abstract class ChartRendererBase implements IChartRenderer {
     private maximized = false;
 
     filterUpdated(data: any, updateArgs: any): void {
+        if (!data) { return; }
         if (!data.Table) { return; }
         if (!this.chart) { return; }
         this.chart.dataSource = this.transformData(data.Table);
@@ -21,6 +22,7 @@ export abstract class ChartRendererBase implements IChartRenderer {
     protected abstract transformData(data: any): any;
 
     render(visualization: IVisualization, container: RVChartTile, data: any): void {
+        if (!data) { return; }
         if (!data.Table) { return; }
         if (!container.chartHost) return;
 

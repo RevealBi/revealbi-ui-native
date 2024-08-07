@@ -14,6 +14,7 @@ export class ChartRegistry {
     static registry = new Map<ChartType | string, { new(): IChartRenderer }>();
 
     static {
+        ChartRegistry.registry.set(ChartType.Area, DataChartRenderer);
         ChartRegistry.registry.set(ChartType.Column, DataChartRenderer);
         ChartRegistry.registry.set(ChartType.Doughnut, DoughnutChartRenderer);
         ChartRegistry.registry.set(ChartType.Funnel, FunnelChartRenderer);

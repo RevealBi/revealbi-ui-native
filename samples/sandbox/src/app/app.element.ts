@@ -4,7 +4,7 @@ import { RevealSdkSettings, RvDashboardViewer } from '@revealbi/ui-native';
 import { registerChartRenderers } from './chart-renderers';
 
 RevealSdkSettings.serverUrl = "https://samples.revealbi.io/upmedia-backend/reveal-api/";
-//registerChartRenderers();
+registerChartRenderers();
 
 export class AppElement extends HTMLElement {
   public static observedAttributes = [];
