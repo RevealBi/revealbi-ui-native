@@ -6,8 +6,9 @@ import { FunnelChartRenderer } from "./chart-renderers/funnel-chart-renderer";
 import { RVChartTile } from "./chart-tile.component";
 
 export interface IChartRenderer {
-    render(visualization: IVisualization, container: RVChartTile, data: any): void;
+    dispose(): void;
     filterUpdated(data: any, updateArgs: any): void; //todo: create an interface for the updateArgs
+    render(visualization: IVisualization, container: RVChartTile, data: any): void;    
 }
 
 export class ChartRegistry {

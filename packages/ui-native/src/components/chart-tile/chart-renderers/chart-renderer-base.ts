@@ -10,6 +10,10 @@ export abstract class ChartRendererBase implements IChartRenderer {
 
     chart: any;
 
+    dispose(): void {
+        if (this.chart) this.chart = null;
+    }
+
     filterUpdated(data: any, updateArgs: any): void {
         if (!data) { return; }
         if (!data.Table) { return; }

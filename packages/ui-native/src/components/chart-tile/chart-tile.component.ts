@@ -44,6 +44,7 @@ export class RVChartTile extends LitElement {
     override disconnectedCallback() {
         super.disconnectedCallback();
         document.removeEventListener("rv-dashboard-filter-changed", this.handleFilterChanged);
+        if (this.chartRenderer) this.chartRenderer.dispose();
     }
 
     protected override firstUpdated(_changedProperties: PropertyValues): void {
@@ -72,7 +73,7 @@ export class RVChartTile extends LitElement {
         filterToggle.iconName = this.maximized ? "Minimize" : "Maximize";
         filterToggle.performed = (o: any, e: any) => {    
             this.maximized = !this.maximized;        
-            this.dispatchEvent(new CustomEvent("rv-tile-maximize-changed", {
+            this.dispatchEvent(new CustomEvent("rv-tile-maximized-changed", {
                 detail: { maximized: this.maximized },
                 bubbles: true,
                 composed: true
@@ -87,7 +88,7 @@ export class RVChartTile extends LitElement {
             this.initializeRenderer();
             const data = await DataService.fetchVisualizationData(this.dashboard, this.visualization, null);             
             this.renderChart(data);                      
-        }        
+        }
     }
 
     private async handleFilterChanged(e: any) {
@@ -105,9 +106,7 @@ export class RVChartTile extends LitElement {
 
     private renderChart(data: any) {
         if (this.chartRenderer) {
-            this.chartRenderer.render(this.visualization, this, data ? data.value : null);
-            this.showToolbar = !!this.toolbar?.children.length;
-            this.showLegend = !!this.legend?.children.length;
+            this.chartRenderer.render(this.visualization, this, data ? data.value : null);            
         } else {
             if (this.chartHost) {
                 this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;
@@ -118,8 +117,6 @@ export class RVChartTile extends LitElement {
     private updateChart(data: any, updateArgs: any) {
         if (this.chartRenderer) {
             this.chartRenderer.filterUpdated(data ? data.value : null, updateArgs);
-            this.showToolbar = !!this.toolbar?.children.length;
-            this.showLegend = !!this.legend?.children.length;
         } else {
             if (this.chartHost) {
                 this.chartHost.innerHTML = `<div>Unsupported chart type: ${this.visualization.chartType}</div>`;

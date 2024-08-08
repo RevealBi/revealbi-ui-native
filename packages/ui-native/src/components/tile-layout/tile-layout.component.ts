@@ -35,11 +35,11 @@ export class RvTileLayout extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('rv-tile-maximize-changed', this.handleToggleMaximize);
+    this.addEventListener('rv-tile-maximized-changed', this.handleToggleMaximize);
   }
 
   override disconnectedCallback() {
-    this.removeEventListener('rv-tile-maximize-changed', this.handleToggleMaximize);
+    this.removeEventListener('rv-tile-maximized-changed', this.handleToggleMaximize);
     super.disconnectedCallback();
   }
 

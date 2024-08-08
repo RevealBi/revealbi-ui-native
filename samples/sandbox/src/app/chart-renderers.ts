@@ -2,21 +2,60 @@ import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRegistry, IChartRenderer, RVChartTile } from "@revealbi/ui-native";
 declare let Highcharts: any;
 
-class KpiChartRenderer implements IChartRenderer {
-    filterUpdated(data: any): void {
-        console.log("update not implemented");
+class HighChartRenderer implements IChartRenderer {
+    protected container: RVChartTile | null = null;
+    protected chartInstance: any;
+    protected originalHeight: number = 0;
+    protected originalWidth: number = 0;
+
+    dispose(): void {
+        this.chartInstance = null;
+        if (this.container) {
+            this.container.removeEventListener('rv-tile-maximized-changed', this.handleResize.bind(this));
+            this.container = null;
+        }
     }
 
-    render(visualization: IVisualization, container: RVChartTile, data: any) {
+    filterUpdated(data: any, updateArgs: any): void {
+        
+    }
+    
+    render(visualization: IVisualization, container: RVChartTile, data: any): void {
+        this.container = container;
+        this.container.showLegend = false;
+
+        this.originalHeight = container.chartHost.clientHeight;
+        this.originalWidth = container.chartHost.clientWidth;
+
+        this.container.addEventListener('rv-tile-maximized-changed', this.handleResize.bind(this));
+    }
+
+    private handleResize(event: any) {
+        if (this.chartInstance) {
+            if (event.detail.maximized) {
+                this.chartInstance.setSize(window.innerWidth, window.innerHeight - 40, false);
+            } else {
+                this.chartInstance.setSize(this.originalWidth, this.originalHeight, false);
+            }
+        }
+    }
+
+}
+
+class KpiChartRenderer extends HighChartRenderer {
+
+    override render(visualization: IVisualization, container: RVChartTile, data: any) {
+        super.render(visualization, container, data);
+
         const trackColors = Highcharts.getOptions().colors.map((color: any) =>
             new Highcharts.Color(color).setOpacity(0.3).get()
         );
 
-        Highcharts.chart(container.chartHost, {
+        this.chartInstance = Highcharts.chart(container.chartHost, {
 
             chart: {
-                type: 'solidgauge',     
-            },
+                type: 'solidgauge',
+            },            
 
             title: {
                 text: '',
@@ -121,13 +160,12 @@ class KpiChartRenderer implements IChartRenderer {
     }
 }
 
-class CircularGaugeRenderer implements IChartRenderer {
-    filterUpdated(data: any): void {
-        console.log("update not implemented");
-    }
+class CircularGaugeRenderer extends HighChartRenderer {
 
-    render(visualization: IVisualization, container: RVChartTile, data: any) {
-        Highcharts.chart(container.chartHost, {
+    override render(visualization: IVisualization, container: RVChartTile, data: any) {
+        super.render(visualization, container, data);
+
+        this.chartInstance = Highcharts.chart(container.chartHost, {
             colors: ['#FFD700', '#C0C0C0', '#CD7F32'],
             chart: {
                 type: 'column',
@@ -135,7 +173,7 @@ class CircularGaugeRenderer implements IChartRenderer {
                 polar: true
             },
             title: {
-                text: '',                
+                text: '',
             },
             navigation: {
                 buttonOptions: {
@@ -205,7 +243,6 @@ class CircularGaugeRenderer implements IChartRenderer {
                 data: [124, 95, 65, 91, 76]
             }]
         });
-        
     }
 }
 
