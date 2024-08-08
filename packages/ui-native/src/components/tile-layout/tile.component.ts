@@ -50,6 +50,7 @@ export class RvTile extends LitElement {
   }
 
   private toggleMaximizeHandler = (event: any) => {
+    event.stopPropagation();
     this.maximized = event.detail.maximized;
   };
 

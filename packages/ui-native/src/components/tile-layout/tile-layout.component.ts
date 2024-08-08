@@ -5,7 +5,6 @@ import { customElement, property, query } from 'lit/decorators.js';
 export class RvTileLayout extends LitElement {
   @property({ type: Number }) rowCount: number = 4; // Default to 3 rows
   @property({ type: Number }) colCount: number = 5; // Default to 60 columns
-  @property({ type: Boolean, reflect: true, attribute: "has-maximized-tile" }) hasMaximizedTile: boolean = false;
 
   static override styles = css`
     :host {
@@ -18,7 +17,7 @@ export class RvTileLayout extends LitElement {
     }
 
     @media (max-width: 768px) {
-      :host(:not([has-maximized-tile])) {
+      :host {
         grid-template-columns: 1fr;
         grid-template-rows: auto;
       }
@@ -33,26 +32,11 @@ export class RvTileLayout extends LitElement {
     }
   `;
 
-  override connectedCallback() {
-    super.connectedCallback();
-    this.addEventListener('rv-tile-maximized-changed', this.handleToggleMaximize);
-  }
-
-  override disconnectedCallback() {
-    this.removeEventListener('rv-tile-maximized-changed', this.handleToggleMaximize);
-    super.disconnectedCallback();
-  }
-
   protected override updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
     if (changedProperties.has('rowCount') || changedProperties.has('colCount')) {
       this.style.setProperty('--row-count', this.rowCount.toString());
       this.style.setProperty('--col-count', this.colCount.toString());
     }
-  }
-
-  private handleToggleMaximize(event: any) {
-    event.stopPropagation();
-    this.hasMaximizedTile = event.detail.maximized;
   }
 
   override render() {

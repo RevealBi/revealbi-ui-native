@@ -1,5 +1,6 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRegistry, IChartRenderer, RVChartTile } from "@revealbi/ui-native";
+import { Thickness } from "igniteui-webcomponents-core";
 declare let Highcharts: any;
 
 class HighChartRenderer implements IChartRenderer {
@@ -33,9 +34,10 @@ class HighChartRenderer implements IChartRenderer {
     private handleResize(event: any) {
         if (this.chartInstance) {
             if (event.detail.maximized) {
-                this.chartInstance.setSize(window.innerWidth, window.innerHeight - 40, false);
+                this.chartInstance.setSize(window.innerWidth - 40, window.innerHeight - 40, false);
             } else {
-                this.chartInstance.setSize(this.originalWidth, this.originalHeight, false);
+                this.chartInstance.setSize(NaN, this.originalHeight, false);
+                this.chartInstance.reflow();
             }
         }
     }
@@ -55,6 +57,7 @@ class KpiChartRenderer extends HighChartRenderer {
 
             chart: {
                 type: 'solidgauge',
+                height: this.originalHeight,
             },            
 
             title: {
@@ -169,6 +172,7 @@ class CircularGaugeRenderer extends HighChartRenderer {
             colors: ['#FFD700', '#C0C0C0', '#CD7F32'],
             chart: {
                 type: 'column',
+                height: this.originalHeight,
                 inverted: true,
                 polar: true
             },
