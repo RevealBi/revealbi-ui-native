@@ -17,7 +17,7 @@ export default css`
         display: grid;
         grid-template-columns: 1fr auto auto;
         align-items: center;
-        height: 40px;
+        height: 42px;
         grid-row: 1;
     }
 
@@ -31,9 +31,10 @@ export default css`
       max-width: 100%; /* Ensure the title does not exceed the container */
     }
 
-    .toolbar {
+    .toolbar-host {
         grid-column: 2;
-    }
+        display: none;
+    }    
 
     .legend {
         grid-row: 2;
