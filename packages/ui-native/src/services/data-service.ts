@@ -1,9 +1,9 @@
 import { DashboardDataFilter, DashboardDateFilter, FilterItem, JsonConvert, RdashDocument } from "@revealbi/dom";
-import { RevealSdkSettings } from "../RevealSdkSettings";
+import { RevealSdkClient } from "../RevealSdkClient";
 
 export class DataService {
     static async fetchVisualizationData(dashboard: RdashDocument, visualization: any, filter: any) {
-        const dataEndpoint = `${RevealSdkSettings.serverUrl}dashboard/editor/widget/data`;
+        const dataEndpoint = `${RevealSdkClient.instance.baseUrl}/dashboard/editor/widget/data`;
 
         //we don't want to parse the entire dashboard, so let's just parse what we care about.
         const temp = new RdashDocument();
@@ -62,7 +62,7 @@ export class DataService {
     }
 
     static async fetchFilterData(dashboard: RdashDocument, filter: DashboardDateFilter | DashboardDataFilter) {
-        const dataEndpoint = `${RevealSdkSettings.serverUrl}dashboard/editor/filters/global`;
+        const dataEndpoint = `${RevealSdkClient.instance.baseUrl}/dashboard/editor/filters/global`;
 
         //we don't want to parse the entire dashboard, so let's just parse what we care about.
         const temp = new RdashDocument();
@@ -191,24 +191,6 @@ export class DataTransformationService {
     }
 }
 
-export class DashboardService {
-    static async getById(id: string): Promise<RdashDocument> {
-        try {
-            const response = await fetch(`${RevealSdkSettings.serverUrl}DashboardFile/${id}`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch dashboard ${id}`);
-            }
-            const result = await response.json();
-            return RdashDocument.loadFromJson(result["model"]);
-
-        } catch (error: any) {
-            console.error("Error fetching dashboard:", error);
-            throw new Error(`Error fetching dashboard ${id}: ${error.message}`);
-        }
-    }
-}
-
-
 
 //todo: need to build up the filter data structure like this
 //no filer applied looks like "51c8175b-2982-4d62-0022-19779e54cb0c": []
@@ -239,7 +221,7 @@ const cacheSettings = {
 //todo: where do I get this?
 const context = {
     "_type": "GlobalFilterContextType",
-    "UserTimeZone": "America/Denver",
+    "UserTimeZone": RevealSdkClient.instance.getTimeZone(),
     "GlobalFiltersContext": {},
     "GlobalVariablesContext": {},
     "DateGlobalFilter": {

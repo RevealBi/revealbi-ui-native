@@ -1,9 +1,9 @@
-import { html, LitElement, PropertyValueMap, PropertyValues } from "lit";
+import { html, LitElement, PropertyValueMap } from "lit";
 import { customElement, property } from 'lit/decorators.js';
 import { ChartType, type IVisualization, RdashDocument } from "@revealbi/dom";
 import { ChartRegistry, IChartRenderer } from "./chart-render-registry";
 import styles from "./chart-tile.styles";
-import { DataService } from "../../data/data-service";
+import { DataService } from "../../services/data-service";
 import { ModuleManager } from "igniteui-webcomponents-core";
 import { IgcToolActionIconButtonComponent, IgcToolbarComponent, IgcToolbarModule } from "igniteui-webcomponents-layouts";
 

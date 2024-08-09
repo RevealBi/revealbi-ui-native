@@ -1,6 +1,6 @@
 import { ChartType, IVisualization } from "@revealbi/dom";
 import { ChartRendererBase } from "./chart-renderer-base";
-import { DataTransformationService } from "packages/ui-native/src/data/data-service";
+import { DataTransformationService } from "packages/ui-native/src/services/data-service";
 import { AutoMarginsAndAngleUpdateMode, IgcCalloutLayerModule, IgcCategoryXAxisComponent, IgcDataChartAnnotationModule, IgcDataChartCategoryCoreModule, IgcDataChartCategoryModule, IgcDataChartComponent, IgcDataChartCoreModule, IgcDataChartExtendedAxesModule, IgcDataChartInteractivityModule, IgcDataChartToolbarModule, IgcDataToolTipLayerComponent, IgcHorizontalAnchoredCategorySeriesComponent, IgcLegendComponent, IgcLegendModule, IgcNumberAbbreviatorModule, IgcNumericYAxisComponent, IgcOrdinalTimeXAxisComponent, LegendOrientation, SeriesHighlightedValuesDisplayMode, SeriesHighlightingBehavior, SeriesHighlightingMode } from "igniteui-webcomponents-charts";
 import { ModuleManager } from "igniteui-webcomponents-core";
 import { IgcToolbarModule } from "igniteui-webcomponents-layouts";

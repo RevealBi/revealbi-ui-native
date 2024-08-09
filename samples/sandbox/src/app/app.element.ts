@@ -1,9 +1,9 @@
 import './app.element.css';
 import "packages/ui-native/src/themes/light.css";
-import { RevealSdkSettings, RvDashboardViewer } from '@revealbi/ui-native';
+import { RevealSdkClient, RvDashboardViewer } from '@revealbi/ui-native';
 import { registerChartRenderers } from './chart-renderers';
 
-RevealSdkSettings.serverUrl = "https://samples.revealbi.io/upmedia-backend/reveal-api/";
+RevealSdkClient.initialize({ baseUrl: "https://samples.revealbi.io/upmedia-backend/reveal-api" });
 registerChartRenderers();
 
 export class AppElement extends HTMLElement {

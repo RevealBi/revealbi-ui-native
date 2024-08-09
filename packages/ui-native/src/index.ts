@@ -1,3 +1,3 @@
 export * from "./components";
 
-export { RevealSdkSettings } from "./RevealSdkSettings";
+export { RevealSdkClient } from "./RevealSdkClient";

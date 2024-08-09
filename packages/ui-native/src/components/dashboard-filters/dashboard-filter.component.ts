@@ -2,7 +2,7 @@ import { DashboardDataFilter, DashboardDateFilter, DashboardFilter, RdashDocumen
 import { ConsolidatedItemsPosition } from "igniteui-webcomponents-charts";
 import { LitElement, PropertyValueMap, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { DataService } from "../../data/data-service";
+import { DataService } from "../../services/data-service";
 import { ModuleManager } from "igniteui-webcomponents-core";
 import { IgcDatePickerModule } from "igniteui-webcomponents-inputs";
 

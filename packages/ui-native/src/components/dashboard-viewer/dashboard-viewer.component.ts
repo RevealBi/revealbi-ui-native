@@ -2,7 +2,7 @@ import { html, LitElement, PropertyValueMap } from "lit";
 import { customElement, property } from 'lit/decorators.js';
 import styles from "./dashboard-viewer.styles";
 import { RdashDocument } from "@revealbi/dom";
-import { DashboardService } from "../../data/data-service";
+import { DashboardService } from "../../services/dashboard-service";
 
 @customElement("rv-dashboard-viewer")
 export class RvDashboardViewer extends LitElement {
